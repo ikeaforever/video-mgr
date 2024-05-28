@@ -98,4 +98,31 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
+  type VideoCategoryItem = {
+    id?: number;
+    name?: string;
+  };
+
+  type VideoCategoryList = {
+    data?: VideoCategoryItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type VideoItem = {
+    id?: number;
+    name?: string;
+    category?: VideoCategoryItem,
+    file_size?: number;
+    play_info_size?: number;
+  };
+  
+  type VideoList = {
+    data?: VideoItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
 }

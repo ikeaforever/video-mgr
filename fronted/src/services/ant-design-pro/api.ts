@@ -64,10 +64,10 @@ export async function rule(
 export async function updateRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
-    data: {
+    data:{
       method: 'update',
       ...(options || {}),
-    },
+    }
   });
 }
 
@@ -75,10 +75,10 @@ export async function updateRule(options?: { [key: string]: any }) {
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
-    data: {
+    data:{
       method: 'post',
       ...(options || {}),
-    },
+    }
   });
 }
 
@@ -86,9 +86,49 @@ export async function addRule(options?: { [key: string]: any }) {
 export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
     method: 'POST',
-    data: {
+    data:{
       method: 'delete',
       ...(options || {}),
+    }
+  });
+}
+
+/** 获取视频列表 GET /api/video */
+export async function video(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.VideoList>('/api/video', {
+    method: 'GET',
+    params: {
+      ...params,
     },
+    ...(options || {}),
+  });
+}
+
+/** 获取视频列表 GET /api/video/category */
+export async function videoCategory(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.VideoCategoryList>('/api/video/category', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
   });
 }

@@ -2,58 +2,57 @@
 from flask import Flask
 from flask import request
 
-import os 
-from flask_sqlalchemy import SQLAlchemy
-basedir = os.path.abspath(os.path.dirname(__name__))
+import os
+from backend.models.tables import  DBSession,Task, Category, Video, session
 
+basedir = os.path.abspath(os.path.dirname(__name__))
 
 app = Flask(__name__)
 
+PAGESIZE = 20
+
 @app.route('/video', methods=['GET'])
 def video():
+    # fecth the video data from sqlite using sqlachmy orm
+    if request.args.get("page"):
+        page = int(request.args.get("page"))
+    else:
+        page = 1
+    if request.args.get("pagesize"):
+        pagesize = int(request.args.get("pagesize"))
+    else:
+        pagesize = PAGESIZE
+
+    video_list = session.query(Video).order_by(Video.id.desc())[pagesize*(page-1):pagesize*page]
+    videos = [video.serialize() for video in video_list] 
+
     return {
         "status": "ok",
-        "code": 0,
+        "total": 10,
         "msg": "触发成功！",
-        "data": [
-            {
-                "id": 1,
-                "name": "视频1",
-                "fileszize": 100,
-                "transcode_size": 100
-            },
-            {
-                "id": 2,
-                "name": "视频2",
-                "fileszize": 100,
-                "transcode_size": 100
-            }
-        ]
+        "data": videos
     }
 
 @app.route('/category', methods=['GET'])
 def category():
+    if request.args.get("page"):
+        page = int(request.args.get("page"))
+    else:
+        page = 1
+    if request.args.get("pagesize"):
+        pagesize = int(request.args.get("pagesize"))
+    else:
+        pagesize = PAGESIZE
 
+    category_list = session.query(Category).order_by(Category.id.desc())[pagesize*(page-1):pagesize*page]
+    categories = [category.serialize() for category in category_list] 
     # the code below is executed if the request method
     # was GET or the credentials were invalid
     return {
-        "status": "ok",
-        "code": 0,
+        "success": True,
         "msg": "触发成功！",
-        "data": [
-            {
-                "id": 1,
-                "name": "分类1"
-            },
-            {
-                "id": 2,
-                "name": "分类2"
-            },
-            {
-                "id": 3,
-                "name": "分类"
-            }
-        ]
+        "total": 20,
+        "data": categories
     }
 
 @app.route('/total', methods=['GET'])
@@ -61,12 +60,15 @@ def total():
 
     # the code below is executed if the request method
     # was GET or the credentials were invalid
+    
+
     return {
         "status": "ok",
         "code": 0,
         "msg": "触发成功！",
         "data": {
             "total": 100,
+            "file_size": 100,
             "transcode_size": 100
         }
     }

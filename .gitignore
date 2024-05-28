@@ -1,3 +1,5 @@
-venv/
+.env/
 db/
 frontend/node_modules/*
+.husky/
+node_modules/
